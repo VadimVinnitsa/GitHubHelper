@@ -2,7 +2,8 @@ import UIKit
 
 
 class ViewController: UIViewController {
-
+    
+    //MARK:- outlets and vars
     
     @IBOutlet weak var userNameTextField: UITextField!
     
@@ -18,91 +19,121 @@ class ViewController: UIViewController {
     @IBOutlet weak var dataUpdate: UILabel!
     
     
+    @IBOutlet weak var writeNameOrIdLabel: UILabel!
+    
+    @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    
+    
+    
     
     var user = User()
- //   var userFromID = [UserFromId]()
-
-   
+    //   var userFromID = [UserFromId]()
     
+    
+    //MARK:- did load
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-//        https://api.github.com/users?since=10000000
-//        https://api.github.com/users/VadimVinnitsa
-//      abrn
- //       bianyujiyi
-  //      emin002
-      
+        
+        //        https://api.github.com/users?since=10000000
+        //        https://api.github.com/users/VadimVinnitsa
+        //      abrn
+        //       bianyujiyi
+        //      emin002
+        
         start()
         
- 
+        
     }
-
+    
     
     func start()  {
         print("did load")
-       
+        userIDTextField.isHidden = true
     }
     
+    //MARK:- get data from site
     func getDataFromGitHubFromLogin(userName: String)  {
-         let path = "https://api.github.com/users/" + userName
+        let path = "https://api.github.com/users/" + userName
         
-        guard let url = URL(string: path) else {return}
+        guard let url = URL(string: path) else {
+           alertForFindPressed(mesage: "bad url login !!!!")
+            return
+             }
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
             //if error do something
+            if error != nil {
+                
+                DispatchQueue.main.async {
+                    self.alertForFindPressed(mesage: "error login nil")
+                 }
+               return
+               }
+            
             guard let data = data else{
-                print("no data")
+                self.alertForFindPressed(mesage: "bad data")
                 return
             }
             do{
-                
                 self.user = try JSONDecoder().decode(User.self, from: data)
                 DispatchQueue.main.async {
                     print(self.user)
-                   self.refreshLabel()
+                    self.refreshLabel()
                 }
-            } catch{}
+            } catch{ // NEED catch error !!!!!!!!!!!!
+               // self.alertForFindPressed(mesage: "login is invalid")
+            }
         }
         task.resume()
     }
- 
+    
     func getDataFromGitHubFromId(userId: Int)  {
-         let path = "https://api.github.com/users?since=" + String(userId-1)
+        let path = "https://api.github.com/users?since=" + String(userId-1)
         print(path)
-        guard let url = URL(string: path) else {return} //
+       
+        guard let url = URL(string: path) else {
+          alertForFindPressed(mesage: "bad url ID")
+            return
+            
+        }
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
-        
+            if error != nil {
+                self.alertForFindPressed(mesage: "error in ID")
+                return
+            }
+            
             guard let data = data else{
-                print("no data")
+                self.alertForFindPressed(mesage: "bad data ID")
                 return
             }
             do{
                 var userFromId = [UserFromId]()
                 userFromId = try JSONDecoder().decode([UserFromId].self, from: data)
-                DispatchQueue.main.async {
-                    print(userFromId[0])
-                    if userFromId[0].id == userId{
-                       self.getDataFromGitHubFromLogin(userName: userFromId[0].login)
+                    if userFromId.count > 0 && userFromId[0].id == userId{
+                        self.getDataFromGitHubFromLogin(userName: userFromId[0].login)
                     }else{
-                        print("id not found")
+                        
+                        DispatchQueue.main.async {
+                            self.alertForFindPressed(mesage: "id not found")
+                        }
                     }
-                    
-                } // need this DispatchQueue
+             // need this DispatchQueue ???
                 
-            } catch{}
+            } catch{} // need catch error!!!!!
         }
         task.resume()
     }
-  
+    
+    //MARK:- refresh label
     func refreshLabel(){
-    id.text = String(user.id)
+        id.text = String(user.id)
         userName.text = user.login
-      //  avatar
-   
+        //  avatar
+        
         
         publicReposts.text = String(user.public_repos)
         publicGists.text = String(user.public_gists)
@@ -112,26 +143,72 @@ class ViewController: UIViewController {
         dataUpdate.text = user.updated_at
         
     }
+    //MARK:- button actions
     
-    @IBAction func findFromIdPressed(_ sender: UIButton) {
-       
-        guard let data = userIDTextField.text, let id = Int(data) else {
-            print("text ID field is empty")
-            return
+    @IBAction func segmentControlPressed(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            userNameTextField.isHidden = false
+            userIDTextField.isHidden = true
+            writeNameOrIdLabel.text = "write Login"
+        }else {
+            userNameTextField.isHidden = true
+            userIDTextField.isHidden = false
+            writeNameOrIdLabel.text = "write Id"
         }
-        print("id - \(id)")
-        getDataFromGitHubFromId(userId: id)
         
     }
     
-    @IBAction func findLoginPressed(_ sender: UIButton) {
-        guard let login = userNameTextField.text else {
-            print("text field is empty")
-            return
+    
+    @IBAction func find(_ sender: UIButton) {
+        if segmentControl.selectedSegmentIndex == 0 {
+            guard let login = userNameTextField.text else {
+                alertForFindPressed(mesage: "NameTextField is nil")
+                return
+            }
+            
+            guard  login != "" else {
+                alertForFindPressed(mesage: "textFieldName id 0 sign")
+                return
+            }
+            
+            print("login - \(login)")
+            getDataFromGitHubFromLogin(userName: login)
         }
-        print("login - \(login)")
-        getDataFromGitHubFromLogin(userName: login)
-         }
+        
+        /////////
+        if segmentControl.selectedSegmentIndex == 1 {
+            guard let data = userIDTextField.text else {  // maybe better if ????
+                alertForFindPressed(mesage: "textIdField is nil")
+                return
+            }
+            guard let id = Int(data) else {
+                alertForFindPressed(mesage: "input number")
+                return
+            }
+            guard id > 1 else {
+                alertForFindPressed(mesage: "input number bigger than 1")
+                return
+            }
+            print("id - \(id)")
+            getDataFromGitHubFromId(userId: id)
+            
+        }
+        
+    }
+    
+    func alertForFindPressed (mesage: String) {
+        print(mesage)
+        
+        let alert = UIAlertController(title: "oops some error", message: mesage, preferredStyle: .alert)
+       // alert.addAction(UIAlertAction(title: "ok", style: .default, handler: funcForAlert))
+        alert.addAction(UIAlertAction(title: "ok", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func funcForAlert(action: UIAlertAction){
+        
+    }
+    
     
     
     @IBAction func followersPressed(_ sender: UIButton) {
