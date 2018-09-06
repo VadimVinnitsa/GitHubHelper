@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		845957B02141858C00D8A8E0 /* FollowersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845957AF2141858C00D8A8E0 /* FollowersViewController.swift */; };
 		8459A516213D9AFC00BCDAB1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459A515213D9AFC00BCDAB1 /* AppDelegate.swift */; };
 		8459A518213D9AFC00BCDAB1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459A517213D9AFC00BCDAB1 /* ViewController.swift */; };
 		8459A51B213D9AFC00BCDAB1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8459A519213D9AFC00BCDAB1 /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		845957AF2141858C00D8A8E0 /* FollowersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersViewController.swift; sourceTree = "<group>"; };
 		8459A512213D9AFC00BCDAB1 /* GitHubHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8459A515213D9AFC00BCDAB1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8459A517213D9AFC00BCDAB1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				8459A517213D9AFC00BCDAB1 /* ViewController.swift */,
 				8459A527213D9FCE00BCDAB1 /* Parse.swift */,
 				8459A519213D9AFC00BCDAB1 /* Main.storyboard */,
+				845957AF2141858C00D8A8E0 /* FollowersViewController.swift */,
 				8459A51C213D9B1000BCDAB1 /* Assets.xcassets */,
 				8459A51E213D9B1000BCDAB1 /* LaunchScreen.storyboard */,
 				8459A521213D9B1000BCDAB1 /* Info.plist */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				845957B02141858C00D8A8E0 /* FollowersViewController.swift in Sources */,
 				8459A518213D9AFC00BCDAB1 /* ViewController.swift in Sources */,
 				8459A528213D9FCE00BCDAB1 /* Parse.swift in Sources */,
 				8459A516213D9AFC00BCDAB1 /* AppDelegate.swift in Sources */,

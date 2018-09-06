@@ -11,6 +11,37 @@ import UIKit
 class Parse: NSObject {
 
 }
+struct UserFromFollowers : Codable {
+   var login: String
+   var id: Int
+ //  var node_id: String
+   var avatar_url: String
+ // var  gravatar_id: "",
+  // var url: String
+ //  var html_url: String
+   var followers_url: String
+   var following_url: String
+ //  var gists_url: String
+ //  var starred_url: String
+ //  var subscriptions_url: String
+ //  var organizations_url: String
+ //  var repos_url: String
+ //  var events_url: String
+//   var received_events_url: String
+//   var type: String
+ //  var site_admin: Bool
+    
+    init(login: String = "-", id: Int = -1, avatar_url: String = "-", followers_url: String = "-", following_url: String = "-" ) {
+        self.login = login
+        self.id = id
+        self.avatar_url = avatar_url
+        self.followers_url = followers_url
+        self.following_url = following_url
+        
+    }
+}
+
+
 struct UserFromId : Codable {
    var login: String
   var  id: Int
