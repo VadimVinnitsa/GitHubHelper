@@ -232,13 +232,13 @@
                         <outlet property="followers" destination="Cj9-eI-sgc" id="Ehi-Jf-cLN"/>
                         <outlet property="following" destination="9GD-6g-vVF" id="9Xr-eP-SyZ"/>
                         <outlet property="id" destination="Qaf-Z1-5dC" id="zJy-RC-5m9"/>
+                        <outlet property="label" destination="Llc-Rg-TQe" id="v1w-4G-ITe"/>
                         <outlet property="publicGists" destination="0KZ-5O-ilQ" id="Iwz-IH-vVq"/>
                         <outlet property="publicReposts" destination="n8y-Sw-hnL" id="qfC-up-jY6"/>
                         <outlet property="segmentControl" destination="0d5-Ep-dip" id="3S1-H8-H9A"/>
                         <outlet property="userIDTextField" destination="Yb9-JX-W6f" id="fIr-2S-ezk"/>
                         <outlet property="userName" destination="Tap-a2-9pV" id="IRc-ev-Xsn"/>
                         <outlet property="userNameTextField" destination="oM7-qb-wPa" id="hNB-n7-ipd"/>
-                        <outlet property="writeNameOrIdLabel" destination="Llc-Rg-TQe" id="paI-nl-xmW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

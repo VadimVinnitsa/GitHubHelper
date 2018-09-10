@@ -16,10 +16,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var following: UILabel!
     @IBOutlet weak var dateCreate: UILabel!
     @IBOutlet weak var dataUpdate: UILabel!
-    @IBOutlet weak var writeNameOrIdLabel: UILabel!
+    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
-    var idStoryboard = "idFollowers"
+    // var idStoryboard = "idFollowers"
     var user = User()
     
     //MARK:- did load
@@ -33,6 +33,8 @@ class ViewController: UIViewController {
         //      emin002
         
         start()
+        userIDTextField.delegate = self
+        userNameTextField.delegate = self
         
         
     }
@@ -42,51 +44,47 @@ class ViewController: UIViewController {
         print("did load")
         userIDTextField.isHidden = true
         
-        
     }
     
-    func getFollowersAndCreateNewVCAndPush(path: String){
+    func getFollowersAndCreateNewVCAndPush(path: String) {
         guard let url = URL(string: path) else {
-            alertForFindPressed(mesage: "bad url GETFOLLOWERS")
+            showAlertAsync(mesage: "bad url GETFOLLOWERS")
             return
         }
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
-            //if error do something
             if error != nil {
-                DispatchQueue.main.async {
-                    self.alertForFindPressed(mesage: "error GetFollowers nil")
-                }
+                self.showAlertAsync(mesage: "error GetFollowers nil")
                 return
             }
             
-            guard let data = data else{
-                self.alertForFindPressed(mesage: "bad data getFolowers")
+            guard let data = data else {
+                self.showAlertAsync(mesage: "bad data getFolowers")
                 return
             }
-            do{
+            do {
                 let users = try JSONDecoder().decode([UserFromFollowers].self, from: data)
                 
                 DispatchQueue.main.async {
                     print(users)
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: self.idStoryboard) as! FollowersViewController
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: FollowersViewController.IdStoryboard) as! FollowersViewController
                     vc.users = users
                     self.navigationController?.pushViewController(vc, animated: true)
-                    
                 }
-            } catch{ // NEED catch error !!!!!!!!!!!!
-                // self.alertForFindPressed(mesage: "login is invalid")
+            } catch let error {
+                self.showAlertAsync(mesage: error.localizedDescription)
             }
         }
         task.resume()
         
     }
     
-    //MARK:- get avatar
-    func getImage(path: String)  {
+    
+    //MARK:- get avatar image
+    func getImage(path: String) {
         //  var path1 = "https://avatars1.githubusercontent.com/u/42915692?v=4"
         guard let url = URL(string: path) else {
-            alertForFindPressed(mesage: "bad url in get img")
+            showAlertAsync(mesage: "bad url in get img")
             return
         }
         DispatchQueue.global().async { // shto eto takoe ??????
@@ -95,12 +93,12 @@ class ViewController: UIViewController {
                     DispatchQueue.main.async {
                         self.avatar.image = UIImage(data: data)
                     }
-                }else{
-                    self.alertForFindPressed(mesage: "no data in GetImg")
+                } else {
+                    self.showAlertAsync(mesage: "no data in GetImg")
                 }
                 
-            }catch let error  {
-                print("get image  \(error)")
+            } catch let error {
+                self.showAlertAsync(mesage: error.localizedDescription)
             }
             
         }
@@ -108,11 +106,11 @@ class ViewController: UIViewController {
     
     
     //MARK:- get user from site
-    func getDataFromGitHubFromLogin(userName: String)  {
+    func getDataFromGitHubFromLogin(userName: String) {
         let path = "https://api.github.com/users/" + userName
         
         guard let url = URL(string: path) else {
-            alertForFindPressed(mesage: "bad url login !!!!")
+            showAlertAsync(mesage: "bad url login !!!!")
             return
         }
         
@@ -120,71 +118,65 @@ class ViewController: UIViewController {
         let task = sesion.dataTask(with: url) { (data, response, error) in
             //if error do something
             if error != nil {
-                
-                DispatchQueue.main.async {
-                    self.alertForFindPressed(mesage: "error login nil")
-                }
+                self.showAlertAsync(mesage: "error login nil")
                 return
             }
             
-            guard let data = data else{
-                self.alertForFindPressed(mesage: "bad data")
+            guard let data = data else {
+                self.showAlertAsync(mesage: "bad data")
                 return
             }
-            do{
+            do {
                 self.user = try JSONDecoder().decode(User.self, from: data)
                 DispatchQueue.main.async {
                     print(self.user)
                     self.refreshLabel()
                 }
-            } catch{ // NEED catch error !!!!!!!!!!!!
-                // self.alertForFindPressed(mesage: "login is invalid")
+            } catch let error  {
+                self.showAlertAsync(mesage: error.localizedDescription + " in login")
             }
         }
         task.resume()
     }
     
-    func getDataFromGitHubFromId(userId: Int)  {
+    func getDataFromGitHubFromId(userId: Int) {
         let path = "https://api.github.com/users?since=" + String(userId-1)
         print(path)
         
         guard let url = URL(string: path) else {
-            alertForFindPressed(mesage: "bad url ID")
+            showAlertAsync(mesage: "bad url ID")
             return
-            
         }
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
             if error != nil {
-                self.alertForFindPressed(mesage: "error in ID")
+                self.showAlertAsync(mesage: "error in ID")
                 return
             }
             
             guard let data = data else{
-                self.alertForFindPressed(mesage: "bad data ID")
+                self.showAlertAsync(mesage: "bad data ID")
                 return
             }
-            do{
+            do {
                 var userFromId = [UserFromId]()
                 userFromId = try JSONDecoder().decode([UserFromId].self, from: data)
                 if userFromId.count > 0 && userFromId[0].id == userId{
                     self.getDataFromGitHubFromLogin(userName: userFromId[0].login)
-                }else{
-                    
-                    DispatchQueue.main.async {
-                        self.alertForFindPressed(mesage: "id not found")
-                    }
+                } else {
+                    self.showAlertAsync(mesage: "id not found")
                 }
-                // need this DispatchQueue ???
                 
-            } catch{} // need catch error!!!!!
+            } catch let error {
+                self.showAlertAsync(mesage: error.localizedDescription)
+            }
         }
         task.resume()
     }
     
     //MARK:- refresh label
-    func refreshLabel(){
+    func refreshLabel() {
         id.text = String(user.id)
         userName.text = user.login
         getImage(path: user.avatar_url)
@@ -204,31 +196,34 @@ class ViewController: UIViewController {
     func findUser() {
         if segmentControl.selectedSegmentIndex == 0 {
             guard let login = userNameTextField.text else {
-                alertForFindPressed(mesage: "NameTextField is nil")
+                showAlert(mesage: "NameTextField is nil")
                 return
             }
             
             guard  login != "" else {
-                alertForFindPressed(mesage: "textFieldName id 0 sign")
+                showAlert(mesage: "textFieldName id 0 sign")
                 return
             }
             
             print("login - \(login)")
             getDataFromGitHubFromLogin(userName: login)
+            print(user.followers_url)
+            print(user.following_url)
+            
         }
         
         /////////
         if segmentControl.selectedSegmentIndex == 1 {
             guard let data = userIDTextField.text else {  // maybe better if ????
-                alertForFindPressed(mesage: "textIdField is nil")
+                showAlert(mesage: "textIdField is nil")
                 return
             }
             guard let id = Int(data) else {
-                alertForFindPressed(mesage: "input number")
+                showAlert(mesage: "input number")
                 return
             }
             guard id > 1 else {
-                alertForFindPressed(mesage: "input number bigger than 1")
+                showAlert(mesage: "input number bigger than 1")
                 return
             }
             print("id - \(id)")
@@ -237,33 +232,52 @@ class ViewController: UIViewController {
         }
     }
     
-    //MARK:- alert func
-    func alertForFindPressed (mesage: String) {
+    //MARK:- alert funcs
+    func showAlertAsync (mesage: String) {
+        DispatchQueue.main.async {
+            print(mesage)
+            let alert = UIAlertController(title: "oops some error", message: mesage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "ok", style: .cancel))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func showAlert (mesage: String) {
         print(mesage)
-        
         let alert = UIAlertController(title: "oops some error", message: mesage, preferredStyle: .alert)
-        // alert.addAction(UIAlertAction(title: "ok", style: .default, handler: funcForAlert))
         alert.addAction(UIAlertAction(title: "ok", style: .cancel))
         self.present(alert, animated: true, completion: nil)
     }
     
-    func funcForAlert(action: UIAlertAction){
-        
-    }
+    
+    //    func funcForAlert(action: UIAlertAction) {
+    //
+    //    }
     
     //MARK:- actions buttton
     @IBAction func findPressed(_ sender: UIButton) {
-        
         findUser()
     }
     
     @IBAction func followersPressed(_ sender: UIButton) {
-        getFollowersAndCreateNewVCAndPush(path: user.followers_url)
-        
-        
+        if user.followers > 0 {
+            getFollowersAndCreateNewVCAndPush(path: user.followers_url)
+            
+        } else {
+            showAlert(mesage: "No followers (")
+        }
     }
     
     @IBAction func followingPressed(_ sender: UIButton) {
+        
+        if user.following > 0 {
+            // getFollowingAndCreateNewVCAndPush(path: user.followers_url)
+            showAlert(mesage: "oto vono tobi bulo treba ?????")
+        } else {
+            showAlert(mesage: "No following (")
+        }
+        
+        
     }
     
     
@@ -271,16 +285,36 @@ class ViewController: UIViewController {
         if sender.selectedSegmentIndex == 0 {
             userNameTextField.isHidden = false
             userIDTextField.isHidden = true
-            writeNameOrIdLabel.text = "write Login"
-        }else {
+            label.text = "write Login"
+        } else {
             userNameTextField.isHidden = true
             userIDTextField.isHidden = false
-            writeNameOrIdLabel.text = "write Id"
+            label.text = "write Id"
         }
         
     }
     
+}
+
+//MARK:- extencsion
+extension ViewController: UITextFieldDelegate {
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if self.userIDTextField == textField {
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            print("delegate id  \(allowedCharacters.isSuperset(of: characterSet))")
+            
+            return allowedCharacters.isSuperset(of: characterSet)
+            
+        }
+        
+        if self.userNameTextField == textField {
+            print("delegate  name)")
+            return true
+        }
+        return false
+    }
 }
 
 

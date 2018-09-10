@@ -1,11 +1,3 @@
-//
-//  FollowersViewController.swift
-//  GitHubHelper
-//
-//  Created by Admin on 06.09.2018.
-//  Copyright © 2018 Admin. All rights reserved.
-//
-
 import UIKit
 
 
@@ -15,7 +7,7 @@ class FollowersViewController: UIViewController {
     
     var indentifier = "cell1"
     var users = [UserFromFollowers]()  // create in func not global var!!!1
-    
+    static var IdStoryboard = "idFollowers"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +15,6 @@ class FollowersViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        
         
     }
     
@@ -35,7 +26,7 @@ class FollowersViewController: UIViewController {
 }
 
 //MARK- extinsions
-extension FollowersViewController: UITableViewDataSource{
+extension FollowersViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return users.count
     }
@@ -69,7 +60,8 @@ extension FollowersViewController: UITableViewDataSource{
     }
     
 }
-extension FollowersViewController: UITableViewDelegate{
+
+extension FollowersViewController: UITableViewDelegate {
     
 }
 

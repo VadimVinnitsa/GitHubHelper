@@ -9,27 +9,27 @@
 import UIKit
 
 class Parse: NSObject {
-
+    
 }
 struct UserFromFollowers : Codable {
-   var login: String
-   var id: Int
- //  var node_id: String
-   var avatar_url: String
- // var  gravatar_id: "",
-  // var url: String
- //  var html_url: String
-   var followers_url: String
-   var following_url: String
- //  var gists_url: String
- //  var starred_url: String
- //  var subscriptions_url: String
- //  var organizations_url: String
- //  var repos_url: String
- //  var events_url: String
-//   var received_events_url: String
-//   var type: String
- //  var site_admin: Bool
+    var login: String
+    var id: Int
+    //  var node_id: String
+    var avatar_url: String
+    // var  gravatar_id: "",
+    // var url: String
+    //  var html_url: String
+    var followers_url: String
+    var following_url: String
+    //  var gists_url: String
+    //  var starred_url: String
+    //  var subscriptions_url: String
+    //  var organizations_url: String
+    //  var repos_url: String
+    //  var events_url: String
+    //   var received_events_url: String
+    //   var type: String
+    //  var site_admin: Bool
     
     init(login: String = "-", id: Int = -1, avatar_url: String = "-", followers_url: String = "-", following_url: String = "-" ) {
         self.login = login
@@ -43,8 +43,9 @@ struct UserFromFollowers : Codable {
 
 
 struct UserFromId : Codable {
-   var login: String
-  var  id: Int
+    var login: String
+    var  id: Int
+    
     
     init(login: String = "-", id: Int = -1) {
         self.id = id
@@ -55,40 +56,40 @@ struct UserFromId : Codable {
 
 struct User : Codable{
     
-   var login : String
-  var  id : Int
-   var node_id : String
-   var avatar_url : String
-//   var gravatar_id : String
-//   var url : String
-//   var html_url : String
-   var followers_url: String
-   var following_url: String
+    var login : String
+    var  id : Int
+    var node_id : String
+    var avatar_url : String
+    //   var gravatar_id : String
+    //   var url : String
+    //   var html_url : String
+    var followers_url: String
+    var following_url: String
     
-//   var gists_url: String
-//   var starred_url: String
-//   var subscriptions_url: String
-//   var organizations_url: String
-//   var repos_url: String
-//   var events_url: String
-//   var received_events_url: String
-//   var type: String
-//   var site_admin: Bool
-//   var name: String
-//   var company: String
-//  var  blog: String
+    //   var gists_url: String
+    //   var starred_url: String
+    //   var subscriptions_url: String
+    //   var organizations_url: String
+    //   var repos_url: String
+    //   var events_url: String
+    //   var received_events_url: String
+    //   var type: String
+    //   var site_admin: Bool
+    //   var name: String
+    //   var company: String
+    //  var  blog: String
     
-//   var location": null,
-  // var email": null,
-   //var hireable": null,
-   //var bio": null,
+    //   var location": null,
+    // var email": null,
+    //var hireable": null,
+    //var bio": null,
     
- var   public_repos: Int
-  var  public_gists: Int
-   var followers: Int
-   var following: Int
-   var created_at: String
-   var updated_at: String
+    var   public_repos: Int
+    var  public_gists: Int
+    var followers: Int
+    var following: Int
+    var created_at: String
+    var updated_at: String
     
     init(login: String = "-", id: Int = -1, node_id: String = "-", avatar_url: String = "-", followers_url: String = "-", following_url: String = "-", public_repos: Int = -1, public_gists: Int = -1, followers: Int = -1, following: Int = -1, created_at: String = "-", updated_at: String = "-" ) {
         self.login = login
@@ -103,16 +104,16 @@ struct User : Codable{
         self.followers = followers
         self.created_at = created_at
         self.updated_at = updated_at
-    
+        
     }
     
-//
-//    init(nickName: String = "", realName: String = "", role: Role = .red) {
-//        self.nickName = nickName
-//        self.realName = realName
-//        self.role = role
-//
-//    }
-
+    //
+    //    init(nickName: String = "", realName: String = "", role: Role = .red) {
+    //        self.nickName = nickName
+    //        self.realName = realName
+    //        self.role = role
+    //
+    //    }
+    
     
 }
