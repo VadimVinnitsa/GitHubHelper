@@ -52,6 +52,7 @@
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yb9-JX-W6f">
                                 <rect key="frame" x="8" y="100" width="178" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.69724989095361445" green="1" blue="0.54704430343042487" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -213,13 +214,6 @@
                                     <action selector="segmentControlPressed:" destination="BYZ-38-t0r" eventType="valueChanged" id="jkw-o8-u5c"/>
                                 </connections>
                             </segmentedControl>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oM7-qb-wPa">
-                                <rect key="frame" x="8" y="112" width="178" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -238,7 +232,6 @@
                         <outlet property="segmentControl" destination="0d5-Ep-dip" id="3S1-H8-H9A"/>
                         <outlet property="userIDTextField" destination="Yb9-JX-W6f" id="fIr-2S-ezk"/>
                         <outlet property="userName" destination="Tap-a2-9pV" id="IRc-ev-Xsn"/>
-                        <outlet property="userNameTextField" destination="oM7-qb-wPa" id="hNB-n7-ipd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

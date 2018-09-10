@@ -5,7 +5,7 @@ class ViewController: UIViewController {
     
     //MARK:- outlets and vars
     
-    @IBOutlet weak var userNameTextField: UITextField!
+  //  @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var userIDTextField: UITextField!
     @IBOutlet weak var id: UILabel!
     @IBOutlet weak var userName: UILabel!
@@ -34,17 +34,26 @@ class ViewController: UIViewController {
         
         start()
         userIDTextField.delegate = self
-        userNameTextField.delegate = self
-        
+    //    userNameTextField.delegate = self
         
     }
     
     
     func start()  {
         print("did load")
-        userIDTextField.isHidden = true
+    //    userIDTextField.isHidden = true
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        
         
     }
+    @objc func keyboardShow() {
+        print("keyboardShow")
+    }
+    @objc func keyboardHide() {
+        print("keyboardHide")
+    }
+    
     
     func getFollowersAndCreateNewVCAndPush(path: String) {
         guard let url = URL(string: path) else {
@@ -195,7 +204,7 @@ class ViewController: UIViewController {
     //MARK:- findUser
     func findUser() {
         if segmentControl.selectedSegmentIndex == 0 {
-            guard let login = userNameTextField.text else {
+            guard let login = userIDTextField.text else {
                 showAlert(mesage: "NameTextField is nil")
                 return
             }
@@ -282,25 +291,24 @@ class ViewController: UIViewController {
     
     
     @IBAction func segmentControlPressed(_ sender: UISegmentedControl) {
-        if sender.selectedSegmentIndex == 0 {
-            userNameTextField.isHidden = false
-            userIDTextField.isHidden = true
-            label.text = "write Login"
-        } else {
-            userNameTextField.isHidden = true
-            userIDTextField.isHidden = false
-            label.text = "write Id"
-        }
-        
+        label.text = sender.selectedSegmentIndex == 0 ? "write Login" : "write Id"
+        userIDTextField.text = ""
+        userIDTextField.resignFirstResponder()
+        userIDTextField.becomeFirstResponder()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    //    userNameTextField.resignFirstResponder()
+        userIDTextField.resignFirstResponder()
+    }
 }
 
 //MARK:- extencsion
 extension ViewController: UITextFieldDelegate {
-    
+    //only Integer
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if self.userIDTextField == textField {
+        if segmentControl.selectedSegmentIndex == 1 {
+           // userIDTextField.keyboardType = .decimalPad
             let allowedCharacters = CharacterSet.decimalDigits
             let characterSet = CharacterSet(charactersIn: string)
             print("delegate id  \(allowedCharacters.isSuperset(of: characterSet))")
@@ -308,13 +316,27 @@ extension ViewController: UITextFieldDelegate {
             return allowedCharacters.isSuperset(of: characterSet)
             
         }
+       // userIDTextField.keyboardType = .default
+    return true
         
-        if self.userNameTextField == textField {
-            print("delegate  name)")
-            return true
-        }
-        return false
     }
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if segmentControl.selectedSegmentIndex == 0 {
+            print("0")
+             userIDTextField.keyboardType = .emailAddress
+        } else {
+             userIDTextField.keyboardType = .decimalPad
+        }
+    }
+    
+    //hide KeyBoard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("textFieldShouldReturn")
+        textField.resignFirstResponder()
+        findUser()
+        return true
+    }
+    
 }
 
 
