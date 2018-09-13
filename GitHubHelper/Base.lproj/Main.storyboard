@@ -58,19 +58,11 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEP-Pm-m4e">
-                                <rect key="frame" x="313" y="423" width="46" height="30"/>
+                                <rect key="frame" x="252" y="422" width="107" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Show Followers"/>
                                 <connections>
                                     <action selector="followersPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LGT-ou-Cci"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W1W-Vd-hDs">
-                                <rect key="frame" x="313" y="463" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="followingPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wn0-9N-Gki"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I23-VC-B4y">
@@ -214,6 +206,14 @@
                                     <action selector="segmentControlPressed:" destination="BYZ-38-t0r" eventType="valueChanged" id="jkw-o8-u5c"/>
                                 </connections>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W1W-Vd-hDs">
+                                <rect key="frame" x="252" y="457" width="107" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Show Following"/>
+                                <connections>
+                                    <action selector="followingPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wn0-9N-Gki"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -230,7 +230,7 @@
                         <outlet property="publicGists" destination="0KZ-5O-ilQ" id="Iwz-IH-vVq"/>
                         <outlet property="publicReposts" destination="n8y-Sw-hnL" id="qfC-up-jY6"/>
                         <outlet property="segmentControl" destination="0d5-Ep-dip" id="3S1-H8-H9A"/>
-                        <outlet property="userIDTextField" destination="Yb9-JX-W6f" id="fIr-2S-ezk"/>
+                        <outlet property="textField" destination="Yb9-JX-W6f" id="fIr-2S-ezk"/>
                         <outlet property="userName" destination="Tap-a2-9pV" id="IRc-ev-Xsn"/>
                     </connections>
                 </viewController>
