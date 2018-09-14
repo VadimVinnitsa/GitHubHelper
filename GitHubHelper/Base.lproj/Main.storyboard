@@ -226,10 +226,10 @@
                         <outlet property="followers" destination="Cj9-eI-sgc" id="Ehi-Jf-cLN"/>
                         <outlet property="following" destination="9GD-6g-vVF" id="9Xr-eP-SyZ"/>
                         <outlet property="id" destination="Qaf-Z1-5dC" id="zJy-RC-5m9"/>
-                        <outlet property="label" destination="Llc-Rg-TQe" id="v1w-4G-ITe"/>
+                        <outlet property="loginOrIdLabel" destination="Llc-Rg-TQe" id="v1w-4G-ITe"/>
+                        <outlet property="loginOrIdSK" destination="0d5-Ep-dip" id="3S1-H8-H9A"/>
                         <outlet property="publicGists" destination="0KZ-5O-ilQ" id="Iwz-IH-vVq"/>
                         <outlet property="publicReposts" destination="n8y-Sw-hnL" id="qfC-up-jY6"/>
-                        <outlet property="segmentControl" destination="0d5-Ep-dip" id="3S1-H8-H9A"/>
                         <outlet property="textField" destination="Yb9-JX-W6f" id="fIr-2S-ezk"/>
                         <outlet property="userName" destination="Tap-a2-9pV" id="IRc-ev-Xsn"/>
                     </connections>
@@ -251,7 +251,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell1" id="YCg-Vv-yfr">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell1" id="YCg-Vv-yfr">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YCg-Vv-yfr" id="ahf-Ya-IXp">

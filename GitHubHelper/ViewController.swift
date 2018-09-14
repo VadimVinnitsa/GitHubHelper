@@ -1,11 +1,9 @@
 import UIKit
 
-
 class ViewController: UIViewController {
     
     //MARK:- outlets and vars
     
-    //  @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var id: UILabel!
     @IBOutlet weak var userName: UILabel!
@@ -16,8 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var following: UILabel!
     @IBOutlet weak var dateCreate: UILabel!
     @IBOutlet weak var dataUpdate: UILabel!
-    @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var segmentControl: UISegmentedControl!
+    @IBOutlet weak var loginOrIdLabel: UILabel!
+    @IBOutlet weak var loginOrIdSK: UISegmentedControl!
     
     var user = User()
     
@@ -28,7 +26,6 @@ class ViewController: UIViewController {
         setupProgram()
         
     }
-    
     
     func setupProgram()  {
         print("did load")
@@ -47,28 +44,23 @@ class ViewController: UIViewController {
         print("keyboardHide")
     }
     
+    
     //MARK:- creare new VC
-    func getFollowersAndCreateNewVCAndPush(path: String) { //?? name????
+    func getFollowersAndCreateNewVCAndPush(path: String) { //?? ?? ?? ?? ?? ?? ??
         guard let url = URL(string: path) else {
             showAlertAsync(mesage: "bad url GETFOLLOWERS")
             return
         }
+        
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
-            if error != nil {
-                self.showAlertAsync(mesage: "error GetFollowers nil")
-                return
-            }
-            
-            guard let data = data else {
-                self.showAlertAsync(mesage: "bad data getFolowers")
+            guard error == nil, let data = data else {
+                self.showAlertAsync(mesage: "error GetFollowers nil or bad data getFolowers")
                 return
             }
             do {
                 let users = try JSONDecoder().decode([UserFromFollowers].self, from: data)
-                
-                DispatchQueue.main.async {
-                    print(users)
+                DispatchQueue.main.async { //?? background!!!!!!!!!!!!
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: FollowersViewController.IdStoryboard) as! FollowersViewController
                     vc.users = users
                     self.navigationController?.pushViewController(vc, animated: true)
@@ -81,32 +73,36 @@ class ViewController: UIViewController {
         
     }
     
+    func createUrlorShowAlert(str: String, alertMessage: String) -> URL? {  //??? if I need nil????
+        
+        guard let url = URL(string: str) else {
+            showAlertAsync(mesage: alertMessage)
+            return nil
+        }
+        return url
+    }
+    
     
     //MARK:- get user from site
     func getDataFromGitHubFromLogin(userName: String) {
         let path = "https://api.github.com/users/" + userName
-        
-        guard let url = URL(string: path) else {
-            showAlertAsync(mesage: "bad url login !!!!")
-            return
-        }
+        //
+        //        guard let url = URL(string: path) else {
+        //            showAlertAsync(mesage: "bad url login !!!!")
+        //            return
+        //        }
+        guard let url = createUrlorShowAlert(str: path, alertMessage: "bad url login !!!!") else {return}  //?????
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
-            if error != nil {
-                self.showAlertAsync(mesage: "error login nil")
-                return
-            }
-            
-            guard let data = data else {
-                self.showAlertAsync(mesage: "bad data")
+            guard error == nil, let data = data else {
+                self.showAlertAsync(mesage: "error login nil or bad data")
                 return
             }
             do {
                 self.user = try JSONDecoder().decode(User.self, from: data)
                 DispatchQueue.main.async {
-                    print(self.user)
-                    self.refreshLabel()
+                    self.refreshLabels()
                 }
             } catch let error  {
                 self.showAlertAsync(mesage: error.localizedDescription + " in login")
@@ -117,22 +113,18 @@ class ViewController: UIViewController {
     
     func getDataFromGitHubFromId(userId: Int) {
         let path = "https://api.github.com/users?since=" + String(userId-1)
-        print(path)
         
-        guard let url = URL(string: path) else {
-            showAlertAsync(mesage: "bad url ID")
-            return
-        }
+        //        guard let url = URL(string: path) else {
+        //            showAlertAsync(mesage: "bad url ID")
+        //            return
+        //        }
+        //
+        guard let url = createUrlorShowAlert(str: path, alertMessage: "bad url ID") else {return} //???
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
-            if error != nil {
-                self.showAlertAsync(mesage: "error in ID")
-                return
-            }
-            
-            guard let data = data else{
-                self.showAlertAsync(mesage: "bad data ID")
+            guard error == nil, let data = data else{
+                self.showAlertAsync(mesage: "error in ID or bad data ID")
                 return
             }
             do {
@@ -149,10 +141,16 @@ class ViewController: UIViewController {
             }
         }
         task.resume()
+        
     }
     
+    func makeNetworkCallAt(url: URL, completion: @escaping ()->Void )  { //????????????
+        
+    }
+    
+    
     //MARK:- refresh label
-    func refreshLabel() {
+    func refreshLabels() {
         id.text = String(user.id)
         userName.text = user.login
         getImage(path: user.avatar_url)
@@ -163,12 +161,10 @@ class ViewController: UIViewController {
         following.text = String(user.following)
         dateCreate.text = user.created_at
         dataUpdate.text = user.updated_at
-        print("followers - \(user.followers_url)")
-        print("following - \(user.following_url)")
         
     }
     
-  // get avatar image
+    // get avatar image
     func getImage(path: String) {
         //  var path1 = "https://avatars1.githubusercontent.com/u/42915692?v=4"
         guard let url = URL(string: path) else {
@@ -177,61 +173,38 @@ class ViewController: UIViewController {
         }
         
         DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url) {
-                    DispatchQueue.main.async {
-                        self.avatar.image = UIImage(data: data)
-                    }
-                } else {
-                    self.showAlertAsync(mesage: "no data in GetImg")
+            if let data = try? Data(contentsOf: url) {
+                DispatchQueue.main.async {
+                    self.avatar.image = UIImage(data: data)
                 }
-            
+            } else {
+                self.showAlertAsync(mesage: "no data in GetImg")
+            }
         }
     }
     
-    
     //MARK:- findUser
     func findUser() {
-        if segmentControl.selectedSegmentIndex == 0 {
-            guard let login = textField.text else {
-                showAlert(mesage: "NameTextField is nil")
+        if loginOrIdSK.selectedSegmentIndex == 0 { // login
+            guard let login = textField.text, login != "" else {
+                showAlert(mesage: "NameTextField is nil or textFieldName id 0 sign")
                 return
             }
-            
-            guard  login != "" else {
-                showAlert(mesage: "textFieldName id 0 sign")
-                return
-            }
-            print("login - \(login)")
             getDataFromGitHubFromLogin(userName: login)
-            print(user.followers_url)
-            print(user.following_url)
-            
         }
         
-        /////////
-        if segmentControl.selectedSegmentIndex == 1 {
-            guard let data = textField.text else {  // maybe better if ????
-                showAlert(mesage: "textIdField is nil")
+        if loginOrIdSK.selectedSegmentIndex == 1 { //ID
+            guard let data = textField.text, let id = Int(data), id > 1 else {
+                showAlert(mesage: "textIdField is nil or input number bigger than 1")
                 return
             }
-            guard let id = Int(data) else {
-                showAlert(mesage: "input number")
-                return
-            }
-            guard id > 1 else {
-                showAlert(mesage: "input number bigger than 1")
-                return
-            }
-            print("id - \(id)")
             getDataFromGitHubFromId(userId: id)
-            
         }
     }
     
     //MARK:- alert functions
     func showAlertAsync (mesage: String) { // go to main theard and show alert
         DispatchQueue.main.async {
-            print(mesage)
             let alert = UIAlertController(title: "oops some error", message: mesage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "ok", style: .cancel))
             self.present(alert, animated: true, completion: nil)
@@ -239,7 +212,6 @@ class ViewController: UIViewController {
     }
     
     func showAlert (mesage: String) { //only show alert
-        print(mesage)
         let alert = UIAlertController(title: "oops some error", message: mesage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ok", style: .cancel))
         self.present(alert, animated: true, completion: nil)
@@ -247,7 +219,7 @@ class ViewController: UIViewController {
     
     //MARK:- func for TextField
     func changeTextFieldStyle(segmentControl: UISegmentedControl) {
-        label.text = segmentControl.selectedSegmentIndex == 0 ? "write Login" : "write Id"
+        loginOrIdLabel.text = segmentControl.selectedSegmentIndex == 0 ? "write Login" : "write Id"
         textField.placeholder = segmentControl.selectedSegmentIndex == 0 ? "write Login" : "write Id"
         textField.text = ""  // clear textField when change SegmentControl
         textField.resignFirstResponder()
@@ -255,7 +227,7 @@ class ViewController: UIViewController {
         
     }
     
-  //  hide keyboard when tapped not textField
+    //  hide keyboard when tapped not textField
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         textField.resignFirstResponder()
     }
@@ -268,25 +240,14 @@ class ViewController: UIViewController {
     @IBAction func followersPressed(_ sender: UIButton) {
         if user.followers > 0 {
             getFollowersAndCreateNewVCAndPush(path: user.followers_url)
-            
         } else {
             showAlert(mesage: "No followers (")
         }
     }
     
     @IBAction func followingPressed(_ sender: UIButton) {
-        
-        //        if user.following > 0 {
-        //            showAlert(mesage: "oto vono tobi bulo treba ?????")
-        //        } else {
-        //            showAlert(mesage: "No following (")
-        //        }
-        
-        //? what method is best?
-        
         let message =  user.following > 0 ? "oto vono tobi bulo treba ?????" : "No following ("
         showAlert(mesage: message)
-        
     }
     
     @IBAction func segmentControlPressed(_ sender: UISegmentedControl) {
@@ -299,10 +260,9 @@ class ViewController: UIViewController {
 extension ViewController: UITextFieldDelegate {
     //input only Integer when ID selected
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if segmentControl.selectedSegmentIndex == 1 {
+        if loginOrIdSK.selectedSegmentIndex == 1 {
             let allowedCharacters = CharacterSet.decimalDigits
             let characterSet = CharacterSet(charactersIn: string)
-            print("delegate id  \(allowedCharacters.isSuperset(of: characterSet))")
             return allowedCharacters.isSuperset(of: characterSet)
         } else {
             return true   // input all letter if Login selected
@@ -311,7 +271,7 @@ extension ViewController: UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {  //change keyBoard style
-        textField.keyboardType = segmentControl.selectedSegmentIndex == 0 ? .default : .decimalPad
+        textField.keyboardType = loginOrIdSK.selectedSegmentIndex == 0 ? .default : .decimalPad
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -320,7 +280,6 @@ extension ViewController: UITextFieldDelegate {
     
     //hide KeyBoard when pressed return
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("textFieldShouldReturn")
         textField.resignFirstResponder()
         findUser()
         return true

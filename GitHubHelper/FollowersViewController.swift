@@ -4,7 +4,13 @@ import UIKit
 class FollowersViewController: UIViewController {
     
     //MARK:- outlets and vars
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView! {
+        didSet {
+            tableView.delegate = self
+            tableView.dataSource = self
+            
+        }
+    }
     
     var indentifier = "cell1"
     var users = [UserFromFollowers]()  // create in func not global var!!!1
@@ -19,9 +25,7 @@ class FollowersViewController: UIViewController {
     
     func setupVC () {
         print("followersDid load")
-        tableView.delegate = self
-        tableView.dataSource = self
-    }
+      }
     
     //MARK:- UI actions
     @IBAction func buttonPressed(_ sender: UIButton) {
@@ -36,7 +40,7 @@ extension FollowersViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5 // wrong, how do not use MagicNumber???
+        return 5 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -45,33 +49,15 @@ extension FollowersViewController: UITableViewDataSource {
         cell.backgroundColor = .purple
         let index = indexPath.section
         
-        //        switch indexPath.row {
-        //        case 0: cell.textLabel?.text = "login - \(users[index].login)"
-        //        case 1: cell.textLabel?.text = "id - \(users[index].id)"
-        //        case 2: cell.textLabel?.text = "avatar_url - \(users[index].avatar_url  )"
-        //        case 3: cell.textLabel?.text = "followers_url - \(users[index].followers_url )"
-        //        case 4: cell.textLabel?.text = "followers_url - \(users[index].followers_url)"
-        //
-        //        default:   cell.textLabel?.text = "error"
-        //        }
+                switch indexPath.row {
+                case 0: cell.textLabel?.text = "login - \(users[index].login)"
+                case 1: cell.textLabel?.text = "id - \(users[index].id)"
+                case 2: cell.textLabel?.text = "avatar_url - \(users[index].avatar_url  )"
+                case 3: cell.textLabel?.text = "followers_url - \(users[index].followers_url )"
+                case 4: cell.textLabel?.text = "followers_url - \(users[index].followers_url)"
         
-        //??????????? what better???
-        
-        switch indexPath.row {
-        case 0:
-            cell.textLabel?.text = "login - \(users[index].login)"
-        case 1:
-            cell.textLabel?.text = "id - \(users[index].id)"
-        case 2:
-            cell.textLabel?.text = "avatar_url - \(users[index].avatar_url  )"
-        case 3:
-            cell.textLabel?.text = "followers_url - \(users[index].followers_url )"
-        case 4:
-            cell.textLabel?.text = "followers_url - \(users[index].followers_url)"
-        default:
-            cell.textLabel?.text = "error"
-        }
-        
+                default:   cell.textLabel?.text = "error"
+                }
         return cell
     }
     
