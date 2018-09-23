@@ -46,11 +46,8 @@ class ViewController: UIViewController {
     
     
     //MARK:- creare new VC
-    func getFollowersAndCreateNewVCAndPush(path: String) { //?? ?? ?? ?? ?? ?? ??
-        guard let url = URL(string: path) else {
-            showAlertAsync(mesage: "bad url GETFOLLOWERS")
-            return
-        }
+    func getFollowers(path: String) {
+        guard let url = URL(string: path) else { return  }
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
@@ -60,10 +57,8 @@ class ViewController: UIViewController {
             }
             do {
                 let users = try JSONDecoder().decode([UserFromFollowers].self, from: data)
-                DispatchQueue.main.async { //?? background!!!!!!!!!!!!
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: FollowersViewController.IdStoryboard) as! FollowersViewController
-                    vc.users = users
-                    self.navigationController?.pushViewController(vc, animated: true)
+                DispatchQueue.main.async {
+                    self.createVC(users: users)
                 }
             } catch let error {
                 self.showAlertAsync(mesage: error.localizedDescription)
@@ -73,25 +68,16 @@ class ViewController: UIViewController {
         
     }
     
-    func createUrlorShowAlert(str: String, alertMessage: String) -> URL? {  //??? if I need nil????
-        
-        guard let url = URL(string: str) else {
-            showAlertAsync(mesage: alertMessage)
-            return nil
-        }
-        return url
+    func createVC(users: [UserFromFollowers]) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: FollowersViewController.IdStoryboard) as! FollowersViewController
+        vc.users = users
+        self.navigationController?.pushViewController(vc, animated: true)
     }
-    
     
     //MARK:- get user from site
     func getDataFromGitHubFromLogin(userName: String) {
         let path = "https://api.github.com/users/" + userName
-        //
-        //        guard let url = URL(string: path) else {
-        //            showAlertAsync(mesage: "bad url login !!!!")
-        //            return
-        //        }
-        guard let url = createUrlorShowAlert(str: path, alertMessage: "bad url login !!!!") else {return}  //?????
+        guard let url = URL(string: path) else { return }
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
@@ -113,13 +99,7 @@ class ViewController: UIViewController {
     
     func getDataFromGitHubFromId(userId: Int) {
         let path = "https://api.github.com/users?since=" + String(userId-1)
-        
-        //        guard let url = URL(string: path) else {
-        //            showAlertAsync(mesage: "bad url ID")
-        //            return
-        //        }
-        //
-        guard let url = createUrlorShowAlert(str: path, alertMessage: "bad url ID") else {return} //???
+        guard let url = URL(string: path) else { return }
         
         let sesion = URLSession(configuration: .default)
         let task = sesion.dataTask(with: url) { (data, response, error) in
@@ -149,7 +129,7 @@ class ViewController: UIViewController {
     }
     
     
-    //MARK:- refresh label
+    //MARK:- refresh labels
     func refreshLabels() {
         id.text = String(user.id)
         userName.text = user.login
@@ -167,10 +147,7 @@ class ViewController: UIViewController {
     // get avatar image
     func getImage(path: String) {
         //  var path1 = "https://avatars1.githubusercontent.com/u/42915692?v=4"
-        guard let url = URL(string: path) else {
-            showAlertAsync(mesage: "bad url in get img")
-            return
-        }
+        guard let url = URL(string: path) else { return }
         
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url) {
@@ -239,7 +216,7 @@ class ViewController: UIViewController {
     
     @IBAction func followersPressed(_ sender: UIButton) {
         if user.followers > 0 {
-            getFollowersAndCreateNewVCAndPush(path: user.followers_url)
+            getFollowers(path: user.followers_url)
         } else {
             showAlert(mesage: "No followers (")
         }
